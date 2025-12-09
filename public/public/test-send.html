@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tester API send-invoice</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:40px;background:#f7f7f8}
+    .card{max-width:760px;margin:0 auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+    input,textarea{width:100%;padding:8px;margin:6px 0;border:1px solid #ccc;border-radius:6px}
+    button{background:#0b6b3a;color:#fff;padding:10px 16px;border:0;border-radius:6px;cursor:pointer}
+    pre{background:#f1f1f3;padding:10px;border-radius:6px;white-space:pre-wrap}
+    label{font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Tester l'API /api/send-invoice</h2>
+
+    <label>Destinataire (to)</label>
+    <input id="to" value="destinataire@gmail.com" />
+
+    <label>Nom</label>
+    <input id="name" value="Nom du bénéficiaire" />
+
+    <label>Montant</label>
+    <input id="amount" value="123.45" />
+
+    <label>Numéro facture</label>
+    <input id="invoiceNumber" value="FCT-0001" />
+
+    <label>Date</label>
+    <input id="date" value="09/12/2025" />
+
+    <label>Message personnalisé (sera affiché dans l'email)</label>
+    <textarea id="messageOptional">Bonjour, voici votre facture. Merci.</textarea>
+
+    <div style="margin-top:10px">
+      <button id="send">Envoyer</button>
+    </div>
+
+    <h3>Réponse :</h3>
+    <pre id="output">—</pre>
+  </div>
+
+  <script>
+    document.getElementById('send').onclick = async () => {
+      const data = {
+        to: document.getElementById('to').value,
+        name: document.getElementById('name').value,
+        amount: document.getElementById('amount').value,
+        invoiceNumber: document.getElementById('invoiceNumber').value,
+        date: document.getElementById('date').value,
+        messageOptional: document.getElementById('messageOptional').value
+      };
+      const out = document.getElementById('output');
+      out.textContent = 'Envoi…';
+      try {
+        const res = await fetch('/api/send-invoice', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        out.textContent = JSON.stringify({ status: res.status, body: json }, null, 2);
+      } catch (e) {
+        out.textContent = 'Erreur fetch : ' + e.message;
+      }
+    };
+  </script>
+</body>
+</html>
