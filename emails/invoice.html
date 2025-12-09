@@ -4,66 +4,83 @@
     <meta charset="utf-8" />
     <title>Facture n°{{invoiceNumber}}</title>
     <style>
-      body { font-family: Arial, sans-serif; color: #222; background: #f7f7f7; margin:0; padding:0; }
-      .container { max-width: 680px; margin: 20px auto; padding: 20px; background: #fff; border-radius:6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-      .header { background:#004481; color:#fff; padding:12px 20px; text-align:left; border-radius:6px 6px 0 0; display:flex; align-items:center; gap:12px; }
-      .header h2 { margin:0; font-size:18px; }
-      .content { margin-top: 16px; color:#222; line-height:1.45; }
-      .amount { font-size: 18px; font-weight: bold; color: #c33; }
-      .footer { margin-top: 24px; font-size: 12px; color: #666; }
-      .btn { background:#004481; color:#fff; padding:10px 14px; text-decoration:none; border-radius:4px; display:inline-block; }
-      a { color:#004481; }
+      body { font-family: Arial, sans-serif; color: #222; background: #f4f6f5; margin:0; padding:0; }
+      .container { max-width: 680px; margin: 20px auto; padding: 0; background: transparent; }
+      .card { background: #ffffff; border-radius:6px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+      .header { background:#0b6b3a; color:#fff; padding:16px 20px; display:flex; align-items:center; gap:12px; }
+      .header img { height:48px; display:block; }
+      .header h2 { margin:0; font-size:18px; font-weight:700; }
+      .notice { background:#eaf5ea; color:#0b6b3a; padding:8px 20px; font-size:13px; }
+      .content { padding:20px; color:#222; line-height:1.5; }
+      .title { color:#0b6b3a; font-size:20px; font-weight:700; margin:6px 0 12px; }
+      .meta { color:#666; font-size:13px; margin-bottom:18px; }
+      .amount-box { border:1px solid #e0e6e2; padding:18px; border-radius:4px; text-align:center; background:#fbfffb; }
+      .amount { color:#0b6b3a; font-size:28px; font-weight:800; }
+      .section-title { background:#f0faf4; border-left:4px solid #0b6b3a; padding:10px 14px; font-weight:700; color:#0b6b3a; margin-top:18px; border-radius:4px; }
+      .details { width:100%; border-collapse:collapse; margin-top:8px; }
+      .details td, .details th { padding:10px 12px; border-bottom:1px solid #eee; font-size:14px; }
+      .details th { text-align:left; background:#f8fdf8; color:#0b6b3a; font-weight:700; }
+      .btn { display:inline-block; background:#0b6b3a; color:#fff; padding:10px 14px; text-decoration:none; border-radius:4px; margin-top:14px; }
+      .footer { padding:16px 20px; font-size:12px; color:#888; background:#fbfbfb; }
+      a { color:#0b6b3a; text-decoration:none; }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="header">
-        <!-- Logo uploaded in /public as BNP.jpg -->
-        <img src="https://raw.githubusercontent.com/zenvirell-cloud/invoice-mailer/main/public/BNP.jpg" alt="{{companyName}}" style="height:60px; display:block;">
-        <h2>{{companyName}}</h2>
-      </div>
+      <div class="card">
+        <div class="header">
+          <img src="https://raw.githubusercontent.com/zenvirell-cloud/invoice-mailer/main/public/BNP.jpg" alt="{{companyName}}">
+          <h2>{{companyName}}</h2>
+        </div>
 
-      <div class="content">
-        <p>Bonjour {{clientName}},</p>
+        <div class="notice">🔒 Communication sécurisée | Ne pas transférer</div>
 
-        <p>
-          Nous vous informons que le virement relatif à la facture n°<strong>{{invoiceNumber}}</strong>,
-          d’un montant de <span class="amount">{{amount}} €</span>, datée du <strong>{{date}}</strong> n’a pas pu être traité et a été bloqué.
-        </p>
+        <div class="content">
+          <div class="title">Confirmation de Virement</div>
+          <div class="meta">{{invoiceNumber}}</div>
 
-        {{#if messageOptional}}
-        <p><strong>Raison indiquée :</strong> {{messageOptional}}</p>
-        {{/if}}
+          <p>Bonjour {{clientName}},</p>
 
-        <p>
-          Nous vous prions de bien vouloir accepter nos excuses pour tout désagrément occasionné. Conformément à nos procédures internes, la régularisation du statut de vos biens est en cours.
-        </p>
+          <p>
+            Nous vous informons que le virement relatif à la facture n°<strong>{{invoiceNumber}}</strong>,
+            d’un montant de <strong>{{amount}} €</strong>, datée du <strong>{{date}}</strong> a été bloqué par notre établissement bancaire.
+          </p>
 
-        <h4>Action requise</h4>
-        <p>Pour régulariser, merci d'effectuer un nouveau paiement en utilisant les coordonnées suivantes :</p>
+          {{#if messageOptional}}
+          <p><strong>Raison indiquée :</strong> {{messageOptional}}</p>
+          {{/if}}
 
-        <p>
-          Titulaire : <strong>{{companyName}}</strong><br>
-          IBAN : <strong>{{IBAN}}</strong><br>
-          BIC/SWIFT : <strong>{{BIC}}</strong><br>
-          Référence : <strong>{{invoiceNumber}}</strong>
-        </p>
+          <div class="amount-box" role="status" aria-live="polite">
+            <div style="font-size:12px;color:#7a8a7e;margin-bottom:6px;">MONTANT DU VIREMENT</div>
+            <div class="amount">{{amount}} EUR</div>
+          </div>
 
-        <p>Une fois le paiement effectué, merci de nous envoyer la preuve de paiement en réponse à cet e‑mail.</p>
+          <div class="section-title">Détails de la transaction</div>
+          <table class="details" role="table">
+            <tr><th>IBAN Bénéficiaire</th><td>{{IBAN}}</td></tr>
+            <tr><th>Motif</th><td>{{messageOptional}}</td></tr>
+            <tr><th>Date d'initiation</th><td>{{date}}</td></tr>
+          </table>
 
-        <p style="margin-top:18px;">
+          <h4 style="color:#0b6b3a;margin-top:18px;">Action requise</h4>
+          <p>Pour régulariser, merci d'effectuer un nouveau paiement en utilisant les coordonnées suivantes :</p>
+          <p>
+            Titulaire : <strong>{{companyName}}</strong><br>
+            IBAN : <strong>{{IBAN}}</strong><br>
+            BIC/SWIFT : <strong>{{BIC}}</strong><br>
+            Référence : <strong>{{invoiceNumber}}</strong>
+          </p>
+
           <a class="btn" href="mailto:{{replyTo}}?subject=Re%3A%20Facture%20{{invoiceNumber}}">Nous contacter</a>
-        </p>
 
-        <p class="footer">Cordialement,<br>L’équipe Facturation — {{companyName}}</p>
+          <p style="margin-top:16px;color:#555;">Nous vous prions d'accepter nos excuses pour le désagrément. Nous restons à votre disposition pour toute information complémentaire.</p>
+        </div>
 
-        <hr style="margin:20px 0; border:none; border-top:1px solid #eee" />
-
-        <p style="font-size:12px; color:#888;">
+        <div class="footer">
           Ceci est un message automatisé. Merci de ne pas répondre.<br>
           © 2024 {{companyName}} – Tous droits réservés.<br>
           {{companyLegal}}
-        </p>
+        </div>
       </div>
     </div>
   </body>
