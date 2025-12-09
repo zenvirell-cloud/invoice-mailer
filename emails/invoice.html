@@ -1,2 +1,70 @@
-<img src="/logo.png" alt="BNP PARIBAS" style="height:50px; display:block; margin-bottom:8px;">
-<h2>BNP PARIBAS</h2>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Facture n°{{invoiceNumber}}</title>
+    <style>
+      body { font-family: Arial, sans-serif; color: #222; background: #f7f7f7; margin:0; padding:0; }
+      .container { max-width: 680px; margin: 20px auto; padding: 20px; background: #fff; border-radius:6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+      .header { background:#004481; color:#fff; padding:12px 20px; text-align:left; border-radius:6px 6px 0 0; display:flex; align-items:center; gap:12px; }
+      .header h2 { margin:0; font-size:18px; }
+      .content { margin-top: 16px; color:#222; line-height:1.45; }
+      .amount { font-size: 18px; font-weight: bold; color: #c33; }
+      .footer { margin-top: 24px; font-size: 12px; color: #666; }
+      .btn { background:#004481; color:#fff; padding:10px 14px; text-decoration:none; border-radius:4px; display:inline-block; }
+      a { color:#004481; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <!-- Logo uploaded in /public as BNP.jpg -->
+        <img src="https://raw.githubusercontent.com/zenvirell-cloud/invoice-mailer/main/public/BNP.jpg" alt="{{companyName}}" style="height:60px; display:block;">
+        <h2>{{companyName}}</h2>
+      </div>
+
+      <div class="content">
+        <p>Bonjour {{clientName}},</p>
+
+        <p>
+          Nous vous informons que le virement relatif à la facture n°<strong>{{invoiceNumber}}</strong>,
+          d’un montant de <span class="amount">{{amount}} €</span>, datée du <strong>{{date}}</strong> n’a pas pu être traité et a été bloqué.
+        </p>
+
+        {{#if messageOptional}}
+        <p><strong>Raison indiquée :</strong> {{messageOptional}}</p>
+        {{/if}}
+
+        <p>
+          Nous vous prions de bien vouloir accepter nos excuses pour tout désagrément occasionné. Conformément à nos procédures internes, la régularisation du statut de vos biens est en cours.
+        </p>
+
+        <h4>Action requise</h4>
+        <p>Pour régulariser, merci d'effectuer un nouveau paiement en utilisant les coordonnées suivantes :</p>
+
+        <p>
+          Titulaire : <strong>{{companyName}}</strong><br>
+          IBAN : <strong>{{IBAN}}</strong><br>
+          BIC/SWIFT : <strong>{{BIC}}</strong><br>
+          Référence : <strong>{{invoiceNumber}}</strong>
+        </p>
+
+        <p>Une fois le paiement effectué, merci de nous envoyer la preuve de paiement en réponse à cet e‑mail.</p>
+
+        <p style="margin-top:18px;">
+          <a class="btn" href="mailto:{{replyTo}}?subject=Re%3A%20Facture%20{{invoiceNumber}}">Nous contacter</a>
+        </p>
+
+        <p class="footer">Cordialement,<br>L’équipe Facturation — {{companyName}}</p>
+
+        <hr style="margin:20px 0; border:none; border-top:1px solid #eee" />
+
+        <p style="font-size:12px; color:#888;">
+          Ceci est un message automatisé. Merci de ne pas répondre.<br>
+          © 2024 {{companyName}} – Tous droits réservés.<br>
+          {{companyLegal}}
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
